@@ -58,9 +58,6 @@ LED_controller = LEDController(clock, sr_data, red_pin, green_pin, blue_pin)
 # Set up battery controller
 battery = BatteryController(pin=analog_vbat, max_voltage=MAX_VBAT)
 
-
-# TODO: PWM implementiere (gemessene spannung * en factor (experimentel usefinde) = PWM signal). Schauen wie viel schritt möglich sind.
-
 #---------------------------------------------------------------------
 # Main code
 
@@ -96,7 +93,6 @@ while True:
             #time.sleep(0.5)
 
     # Check battery status
-    # TODO: Check how often the battery should be checked and what a "low battery status" should be.
     # Get current battery voltage in % of max. battery voltage
     pct_vbat = battery.get_battery_voltage()/MAX_VBAT
 
