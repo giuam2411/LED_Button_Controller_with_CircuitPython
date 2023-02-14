@@ -1,16 +1,13 @@
-
 class BatteryController():
     def __init__(self, pin, max_voltage):
         self.pin = pin
         self.max_voltage = max_voltage
-
 
     def get_battery_voltage(self):
         """
         Takes a pin and returns its analogue input value in V.
         """
         return (self.pin.value * 3.3) / 65536
-
 
     def get_battery_status(self):
         """
@@ -25,12 +22,3 @@ class BatteryController():
         for idx, boundary in enumerate(bins):
             if (round(self.get_battery_voltage(),3) <= round(boundary,3)):
                 return int(status[idx])
-
-
-    def is_battery_low(self):
-        """
-        Checks whether the battery is low (<= 1/4 of the maximum voltage).
-        """
-        if self.get_battery_status() <= 1:
-            return True
-        return False
