@@ -42,36 +42,50 @@ class LEDController():
         self.clock.value = False
 				
         # Set the target color pin(s) to output a logical high
-        if color == "red":
-            self.turn_on_PWM(self.red_pin, duration)
-
-        elif color == "green":
-            self.turn_on_PWM(self.green_pin, duration)
-
-        elif color == "blue":
-            self.turn_on_PWM(self.blue_pin, duration)
-
-        else:
-            self.turn_on_PWM(self.red_pin, duration)
-            self.turn_on_PWM(self.green_pin, duration)
-            self.turn_on_PWM(self.blue_pin, duration)
+        self.turn_on_PWM(duration, color)
 
 
-    def turn_on_PWM(self, pin, duration):
+    def turn_on_PWM(self, duration, color):
         """
         Implementation of PWM on a selected pin for a specified duration.
         """
-        # Calculate how many times out of 20 (5% steps) the pin needs to be high or low.
-        n_high = self.brightness * 20
-        n_low = (1-self.brightness) * 20
+        # Calculate how many times out of 100 (1% steps) the pin needs to be high or low.
+        n_high = self.brightness * 100
+        n_low = (1-self.brightness) * 100
 
         start_time = supervisor.ticks_ms()
 
-        while start_time-supervisor.ticks_ms() <= duration*1000:
-            for _ in range(0, n_high):
-                pin.value = True
-            for _ in range(0, n_low):
-                pin.value = False
+        if color == "white":
+            while supervisor.ticks_ms()-start_time <= duration*1000:
+                for _ in range(0, n_high):
+                    self.red_pin.value = True
+                    self.blue_pin.value = True
+                    self.green_pin.value = True
+                for _ in range(0, n_low):
+                    self.red_pin.value = False
+                    self.blue_pin.value = False
+                    self.green_pin.value = False
+
+        elif color == "green":
+            while supervisor.ticks_ms()-start_time <= duration*1000:
+                for _ in range(0, n_high):
+                    self.green_pin.value = True
+                for _ in range(0, n_low):
+                    self.green_pin.value = False
+
+        elif color == "red":
+            while supervisor.ticks_ms()-start_time <= duration*1000:
+                for _ in range(0, n_high):
+                    self.red_pin.value = True
+                for _ in range(0, n_low):
+                    self.red_pin.value = False
+
+        elif color == "blue":
+            while supervisor.ticks_ms()-start_time <= duration*1000:
+                for _ in range(0, n_high):
+                    self.blue_pin.value = True
+                for _ in range(0, n_low):
+                    self.blue_pin.value = False
 
 
     def blink_LED(self, bitval=0xFF, color="white", times=10, interval=0.33):
@@ -118,5 +132,5 @@ class LEDController():
         Modulates the brightness. The brightness should be
         a value between 0 (0%) and 1 (100%), where 1 corresponds to the maximal brightness.
         """
-        # Round brightness to 0.05 decimals (20 brightness levels)
-        self.brightness = (round(brightness * 20) / 20)
+        # Round brightness to 0.01 decimals (100 brightness levels)
+        self.brightness = (round(brightness * 100) / 100)
