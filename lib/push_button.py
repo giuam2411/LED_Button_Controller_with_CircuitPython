@@ -15,17 +15,15 @@ class PushButton:
         self.name = name
         self.back_light = back_light
 
-
     def get_voltage(self):
         """
         Takes a pin and returns its analogue input value in V.
         """
         return (self.pin.value * 3.3) / 65536
 
-
     def get_button_state(self):
         """
-        This function takes the pin voltage and returns the
+        Takes the pin voltage and returns the
         button state, where "pressed" = True and "not pressed" = False.
         """
         if abs(self.get_voltage() - self.target_voltage) < self.threshold:
@@ -34,7 +32,6 @@ class PushButton:
             button_state = False
 
         return button_state
-
 
     def get_debounced_signal(self):
         """
