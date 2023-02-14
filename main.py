@@ -66,7 +66,6 @@ battery = BatteryController(pin=analog_vbat, max_voltage=MAX_VBAT)
 
 # 0. Check battery status when the device is turned on
 battery_status = battery.get_battery_status()
-print(f"The battery status is: {battery_status}.")
 LED_controller.show_battery_status(battery_status)
 
 
@@ -79,7 +78,6 @@ while no_target_button:
         if button_pressed:
             # If a button is pressed, set it as the target button and give visual feedback
             button.is_target_button = True
-            print(f"Button {button.name[-1:]} has been set as target button.")
             LED_controller.turn_on_LED(bitval=button.back_light, color="blue", duration=1)
             no_target_button = False
 
@@ -92,10 +90,8 @@ while True:
         if button_pressed:
             # If a button is pressed, give visual feedback
             if button.is_target_button:
-                print(f"Correct button! Button {button.name[-1:]} has been pressed")
                 LED_controller.turn_on_LED(bitval=button.back_light, color="green", duration=2)
             else:
-                print(f"Wrong button! Button {button.name[-1:]} has been pressed")
                 LED_controller.turn_on_LED(bitval=button.back_light, color="red", duration=2)
             #time.sleep(0.5)
 
@@ -105,15 +101,11 @@ while True:
     pct_vbat = battery.get_battery_voltage()/MAX_VBAT
 
     # Modulate the brightness of the LEDs depending on the battery voltage
-    if current_vbat < 0.9:
+    if pct_vbat < 0.9:
         LED_controller.modulate_brightness(brightness=current_vbat)
 
     # Indicate low battery status (<= 1/4 of the maximum voltage)
-    if current_vbat < 0.25:
+    if pct_vbat < 0.25:
         LED_controller.indicate_low_battery()
-
-    #if battery.is_battery_low():
-        #LED_controller.indicate_low_battery()
-
 
 
